@@ -1,3 +1,0 @@
-/home/alex-watts/projects/my-chat-app/build/CMakeFiles/ChatApp.dir
-/home/alex-watts/projects/my-chat-app/build/CMakeFiles/edit_cache.dir
-/home/alex-watts/projects/my-chat-app/build/CMakeFiles/rebuild_cache.dir
