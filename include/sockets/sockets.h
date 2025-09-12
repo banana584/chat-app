@@ -28,11 +28,23 @@ char socket_errbuff[1024];
     typedef struct Socket {
         int fd;
     } Socket;
-#elif definied(_WIN32) || defined(__unix__)
+    #ifndef FORMAT_SOCKET_ERROR_NUM
+        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) *buffer = strerror(error_num)
+    #endif
+#elif definied(_WIN32) || defined(_WIN64)
     typedef struct Socket {
         SOCKET fd;
     } Socket;
+    #ifndef FORMAT_SOCKET_ERROR_NUM
+        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error_num, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)buffer, 0, NULL)
+    #endif
 #endif
+
+typedef struct Message {
+    char string[1024];
+    size_t num_chars;
+    int flags;
+} Message;
 
 int Socket_InitializeLib();
 
@@ -40,6 +52,16 @@ void Socket_DeInitializeLib();
 
 Socket* Socket_Create();
 
+int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len);
+
+int Socket_Listen(Socket* socket, int backlog);
+
 int Socket_Connect(Socket* socket, struct sockaddr_in* addr);
+
+int Socket_Accept(Socket* socket);
+
+ssize_t Socket_Send(Socket* socket, Message* message);
+
+Message* Socket_Recieve(Socket* socket);
 
 #endif

@@ -7,7 +7,7 @@ int Socket_InitializeLib() {
         WSADATA wsaData;
 
         int result = 0;
-        if ((result = WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        if ((result = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
             sprintf(socket_errbuff, "%d", result);
             errno = result;
             return -1;
@@ -37,43 +37,168 @@ Socket* Socket_Create() {
 
     socket->fd = socket(AF_INET, SOCK_STREAM, 0);
     int result = 0;
+    
     #if defined(_WIN32) || defined(_WIN64)
         if (socket->fd == INVALID_SOCKET) {
             result = WSAGetLastError();
-            FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, result, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&socket_errbuff, 0, NULL);
-            errno = result;
-            return -1;
         }
     #elif defined(__linux__) || defined(__unix__)
         if (socket->fd < 0) {
             result = errno;
-            socket_errbuff = strerror(result);
-            errno = result;
-            return -1;
         }
     #endif
+    if (result != 0) {
+        FORMAT_SOCKET_ERROR_NUM(result, &socket_errbuff);
+        errno = result;
+        return -1;
+    }
 
     return socket;
 }
 
+int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len) {
+    CLEAR_SOCKET_ERRBUFF(socket_errbuff);
+    errno = 0;
+
+    int errcode = 0;
+    int result = bind(socket->fd, (struct sockaddr*)addr, addr_len);
+    if (result < 0) {
+        #if defined(_WIN32) || defined(_WIN64)
+            errcode = WSAGetLastError();
+        #elif defined(__linux__) || defined(__unix__)
+            errcode = errno;
+        #endif
+        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        errno = errcode;
+        return -1;
+    }
+
+    return 0;
+}
+
+int Socket_Listen(Socket* socket, int backlog) {
+    CLEAR_SOCKET_ERRBUFF(socket_errbuff);
+    errno = 0;
+
+    int errcode = 0;
+    int result = listen(socket->fd, backlog);
+    if (result < 0) {
+        #if defined(_WIN32) || defined(_WIN64)
+            errcode = WSAGetLastError();
+        #elif defined(__linux__) || defined(__unix__)
+            errcode = errno;
+        #endif
+        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        errno = errcode;
+        return -1;
+    }
+
+    return 0;
+}
+
 int Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
+    CLEAR_SOCKET_ERRBUFF(socket_errbuff);
+    errno = 0;
     int result = connect(socket->fd, (struct sockaddr*)&addr, sizeof(*addr));
+    int errcode = 0;
 
     #if defined(_WIN32) || defined(_WIN64)
         if (result == SOCKET_ERROR) {
-            result = WSAGetLastError();
-            FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, result, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&socket_errbuff, 0, NULL);
-            errno = result;
-            return -1;
+            errcode = WSAGetLastError();
         }
     #elif defined(__linux__) || defined(__unix__)
         if (result < 0) {
-            result = errno;
-            socket_errbuff = strerror(result);
-            errno = result;
-            return -1;
+            errcode = errno;
         }
     #endif
-
+    if (errcode != 0) {
+        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        errno = errcode;
+        return -1;
+    }
+    
     return 0;
+}
+
+int Socket_Accept(Socket* socket) {
+    CLEAR_SOCKET_ERRBUFF(socket_errbuff);
+    errno = 0;
+
+    struct sockaddr_in addr = {0};
+
+    int errcode = 0;
+    int result = accept(socket->fd, (struct sockaddr*)&addr, sizeof(struct sockaddr_in))
+    #if defined(_WIN32) || defined(_WIN64)
+        if (result == SOCKET_ERROR) {
+            errcode = WSAGetLastError();
+        }
+    #elif defined(__linux__) || defined(__unix__)
+        if (result < 0) {
+            errcode = errno;
+        }
+    #endif
+    if (errcode != 0) {
+        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        errno = errcode;
+        return -1;
+    }
+
+    return result;
+}
+
+ssize_t Socket_Send(Socket* socket, Message* message) {
+    CLEAR_SOCKET_ERRBUFF(socket_errbuff);
+    errno = 0;
+
+    int errcode = 0;
+    ssize_t result = send(socket->fd, message->string, message->num_chars, 0);
+    #if defined(_WIN32) || defined(_WIN64)
+        if (result == SOCKET_ERROR) {
+            errcode = WSAGetLastError();
+        }
+    #elif defined(__linux__) || defined(__unix__)
+        if (result < 0) {
+            errcode = errno;
+        }
+    #endif
+    if (errcode != 0) {
+        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        errno = errcode;
+        return -1;
+    }
+
+    return result;
+}
+
+Message* Socket_Recieve(Socket* socket) {
+    CLEAR_SOCKET_ERRBUFF(socket_errbuff);
+    errno = 0;
+
+    Message* message = (Message*)malloc(sizeof(Message));
+    if (!message) {
+        socket_errbuff = strerror(errno);
+        return NULL;
+    }
+    message->string = {0};
+    message->num_chars = 0;
+    message->flags = 0;
+
+    int errcode = 0;
+    ssize_t result = recv(socket->fd, message->string, 1024, 0);
+    if (result > 0) {
+        return message;
+    } else if (result == 0) {
+        message->flags = SOCKET_MESSAGE_CONN_CLOSED;
+        return message;
+    } else {
+        #if defined(_WIN32) || defined(_WIN64)
+            errcode = WSAGetLastError();
+        #elif defined(__linux__) || defined(__unix__)
+            errcode = errno;
+        #endif
+        free(message);
+        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        errno = errcode;
+        return NULL;
+    }
 }
