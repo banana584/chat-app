@@ -30,7 +30,7 @@ Socket* Socket_Create() {
     Socket* socket = (Socket*)malloc(sizeof(Socket));
     if (!socket) {
         int result = errno;
-        socket_errbuff = strerror(result);
+        sprintf(socket_errbuff, "%s", strerror(result));
         errno = result;
         return -1;
     }
