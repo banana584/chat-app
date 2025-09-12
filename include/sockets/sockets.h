@@ -1,11 +1,11 @@
 #ifndef SOCKETS_UTILS_H
 #define SOCKETS_UTILS_H
 
-#if definied(__linux__) || defined(__unix__)
+#if defined(__linux__) || defined(__unix__)
     #include <sys/socket.h>
     #include <netinet/in.h>
     #include <arpa/inet.h>
-#elif definied(_WIN32) || defined(_WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
     #define WIN32_LEAN_AND_MEAN
     #include <winsock2.h>
     #include <ws2tcpip.h>
@@ -24,14 +24,14 @@ char socket_errbuff[1024];
     #define CLEAR_SOCKET_ERRBUFF(errbuff) memset(errbuff, 0, SOCKET_ERRBUFF_SIZE)
 #endif
 
-#if definied(__linux__) || definied(__unix__)
+#if defined(__linux__) || defined(__unix__)
     typedef struct Socket {
         int fd;
     } Socket;
     #ifndef FORMAT_SOCKET_ERROR_NUM
         #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) *buffer = strerror(error_num)
     #endif
-#elif definied(_WIN32) || defined(_WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
     typedef struct Socket {
         SOCKET fd;
     } Socket;
