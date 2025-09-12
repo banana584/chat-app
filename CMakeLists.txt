@@ -12,3 +12,9 @@ add_executable(${CMAKE_PROJECT_NAME}
     src/main.c
 )
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
+include(CTest)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
