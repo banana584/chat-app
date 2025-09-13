@@ -79,8 +79,8 @@ jobs:
       run: ctest --output-on-failure -V -N --build-config ${{ matrix.build_type }}
 
     - name: Test2
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: dir /home/runner/work/chat-app/chat-app/build/tests/
+      ##working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: dir D:/a/chat-app/chat-app/build/tests/
 
 
 
