@@ -94,7 +94,13 @@ int Socket_Listen(Socket* socket, int backlog) {
 
     int errcode = 0;
     int result = listen(socket->fd, backlog);
-    if (result < 0) {
+    int check = 0;
+    #if defined(_WIN32) || defined(_WIN64)
+      check = result == SOCKET_ERROR;
+    #elif defined(__linux__) || defined(__unix__)
+      check = result < 0;
+    #endif
+    if (check) {
         #if defined(_WIN32) || defined(_WIN64)
             errcode = WSAGetLastError();
         #elif defined(__linux__) || defined(__unix__)
