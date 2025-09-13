@@ -148,7 +148,7 @@ int Socket_Accept(Socket* socket) {
     return result;
 }
 
-ssize_t Socket_Send(Socket* socket, Message* message) {
+int Socket_Send(Socket* socket, Message* message) {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
 

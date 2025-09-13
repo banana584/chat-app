@@ -63,7 +63,7 @@ int Socket_Connect(Socket* socket, struct sockaddr_in* addr);
 
 int Socket_Accept(Socket* socket);
 
-ssize_t Socket_Send(Socket* socket, Message* message);
+int Socket_Send(Socket* socket, Message* message);
 
 Message* Socket_Recieve(Socket* socket);
 
