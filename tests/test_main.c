@@ -23,6 +23,9 @@ int main(int argc, char* argv[]) {
 
   Socket* socket1 = Socket_Create();
   assert(socket1 != NULL);
+
+  int optval = 1;
+  setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(int))
   /*
   #if defined(__linux__) || defined(__unix__)
     assert(socket1->fd != -1);
