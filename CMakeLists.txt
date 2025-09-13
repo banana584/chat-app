@@ -19,7 +19,7 @@ add_library(sockets
     src/sockets/sockets.c
 )
 
-target_include_directories(sockets PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(sockets STATIC ${PROJECT_SOURCE_DIR}/include)
 
 if(WIN32)
     target_link_libraries(ChatApp PRIVATE ws2_32)
