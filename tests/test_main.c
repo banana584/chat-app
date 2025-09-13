@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
   Socket* socket1 = Socket_Create();
   assert(errno == 0);
   assert(strcmp(socket_errbuff, "") == 0);
+  assert(socket1 != NULL);
 
   struct sockaddr_in addr1 = {0};
   addr1.sin_family = AF_INET;
@@ -41,7 +42,8 @@ int main(int argc, char* argv[]) {
   Socket* socket2 = Socket_Create();
   assert(errno == 0);
   assert(memcmp(socket_errbuff, empty, 1024) == 0);
-
+  assert(socket2 != NULL);
+  
   Socket_Destroy(socket1);
   assert(errno == 0);
   assert(memcmp(socket_errbuff, empty, 1024) == 0);
