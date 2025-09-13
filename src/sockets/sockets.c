@@ -32,7 +32,7 @@ Socket* Socket_Create() {
         int result = errno;
         sprintf(socket_errbuff, "%s", strerror(result));
         errno = result;
-        return -1;
+        return NULL;
     }
 
     socket->fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -50,7 +50,7 @@ Socket* Socket_Create() {
     if (result != 0) {
         FORMAT_SOCKET_ERROR_NUM(result, &socket_errbuff);
         errno = result;
-        return -1;
+        return NULL;
     }
 
     return socket;

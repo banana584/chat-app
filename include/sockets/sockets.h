@@ -1,18 +1,20 @@
 #ifndef SOCKETS_UTILS_H
 #define SOCKETS_UTILS_H
 
+#include <stdio.h>
 #if defined(__linux__) || defined(__unix__)
     #include <sys/socket.h>
     #include <netinet/in.h>
     #include <arpa/inet.h>
+    printf("running on linux/unix\n");
 #elif defined(_WIN32) || defined(_WIN64)
     #define WIN32_LEAN_AND_MEAN
     #include <winsock2.h>
     #include <ws2tcpip.h>
     #include <windows.h>
     #pragma comment(lib, "ws2_32.lib")
+    printf("running on windows\n");
 #endif
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
