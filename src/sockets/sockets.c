@@ -41,7 +41,7 @@ Socket* Socket_Create() {
         return NULL;
     }
 
-    s->fd = socket(AF_INET, SOCK_STREAM, 0);
+    s->fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     int result = 0;
     
     #if defined(_WIN32) || defined(_WIN64)
