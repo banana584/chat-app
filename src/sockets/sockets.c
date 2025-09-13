@@ -153,7 +153,7 @@ int Socket_Send(Socket* socket, Message* message) {
     errno = 0;
 
     int errcode = 0;
-    ssize_t result = send(socket->fd, message->string, message->num_chars, 0);
+    int result = send(socket->fd, message->string, message->num_chars, 0);
     #if defined(_WIN32) || defined(_WIN64)
         if (result == SOCKET_ERROR) {
             errcode = WSAGetLastError();
@@ -186,7 +186,7 @@ Message* Socket_Recieve(Socket* socket) {
     message->flags = 0;
 
     int errcode = 0;
-    ssize_t result = recv(socket->fd, message->string, 1024, 0);
+    int result = recv(socket->fd, message->string, 1024, 0);
     if (result > 0) {
         return message;
     } else if (result == 0) {
