@@ -32,7 +32,11 @@ Socket* Socket_Create() {
     Socket* s = (Socket*)malloc(sizeof(Socket));
     if (!s) {
         int result = errno;
-        strerror_s(socket_errbuff, sizeof(socket_errbuff), result);
+        #if defined(_WIN32) || defined(_WIN64)
+            strerror_s(socket_errbuff, sizeof(socket_errbuff), result);
+        #elif defined(__linux__) || defined(__unix__)
+            strcpy(socket_errbuff, strerror(result));
+        #endif
         errno = result;
         return NULL;
     }
@@ -180,7 +184,11 @@ Message* Socket_Recieve(Socket* socket) {
 
     Message* message = (Message*)malloc(sizeof(Message));
     if (!message) {
-        strerror_s(socket_errbuff, sizeof(socket_errbuff), errno);
+        #if defined(_WIN32) || defined(_WIN64)
+            strerror_s(socket_errbuff, sizeof(socket_errbuff), errno);
+        #elif defined(__linux__) || defined(__unix__)
+            strcpy(socket_errbuff, strerror(errno));
+        #endif
         return NULL;
     }
     memset(message->string, 0, 1024);
