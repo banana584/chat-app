@@ -16,7 +16,7 @@ add_library(sockets
     src/sockets/sockets.c
 )
 
-target_include_directories(socket PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(sockets PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sockets)
 
