@@ -126,8 +126,10 @@ int Socket_Accept(Socket* socket) {
 
     struct sockaddr_in addr = {0};
 
+    socklen_t addr_len = sizeof(struct sockaddr_in);
+
     int errcode = 0;
-    int result = accept(socket->fd, (struct sockaddr*)&addr, sizeof(struct sockaddr_in));
+    int result = accept(socket->fd, (struct sockaddr*)&addr, &addr_len);
     #if defined(_WIN32) || defined(_WIN64)
         if (result == SOCKET_ERROR) {
             errcode = WSAGetLastError();
