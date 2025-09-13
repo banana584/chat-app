@@ -2,6 +2,10 @@ enable_testing()
 
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 
+if (WIN32)
+  target_link_libraries(test_main PRIVATE ws2_32)
+endif()
+
 set(CMAKE_C_FLAGS_DEBUG "-g -fsanitize=address")
 
 add_executable(test_main test_main.c)
