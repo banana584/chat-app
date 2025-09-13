@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <unistd.h>
-#include "../../include/sockets/sockets.h"
+#include <sockets/sockets.h>
 
 void Socket_Destroy(Socket* socket) {
   #if defined(_WIN32) || defined(_WIN64)
@@ -46,6 +46,8 @@ int main(int argc, char* argv[]) {
   assert(strcmp(socket_errbuff, "") == 0);
 
   Socket_DeInitializeLib();
+
+  printf("All tests passed!\n");
 
   return 0;
 }
