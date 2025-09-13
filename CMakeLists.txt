@@ -27,10 +27,10 @@ if(WIN32)
     target_link_libraries(sockets PRIVATE ws2_32 ucrt)
 endif()
 
-if (MSCV)
-    target_link_libraries(ChatApp PRIVATE legacy_stdio_definitions)
-    target_link_libraries(sockets PRIVATE legacy_stdio_definitions)
-endif()
+# if (MSCV)
+#     target_link_libraries(ChatApp PRIVATE legacy_stdio_definitions)
+#     target_link_libraries(sockets PRIVATE legacy_stdio_definitions)
+# endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sockets)
 
