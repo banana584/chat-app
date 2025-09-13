@@ -178,10 +178,10 @@ Message* Socket_Recieve(Socket* socket) {
 
     Message* message = (Message*)malloc(sizeof(Message));
     if (!message) {
-        socket_errbuff = strerror(errno);
+        sprintf(socket_errbuff, "%s", strerror(errno));
         return NULL;
     }
-    message->string = {0};
+    memset(message->string, 0, 1024);
     message->num_chars = 0;
     message->flags = 0;
 

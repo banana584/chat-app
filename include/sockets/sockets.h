@@ -24,6 +24,8 @@ char socket_errbuff[1024];
     #define CLEAR_SOCKET_ERRBUFF(errbuff) memset(errbuff, 0, SOCKET_ERRBUFF_SIZE)
 #endif
 
+#define SOCKET_MESSAGE_CONN_CLOSED 1
+
 #if defined(__linux__) || defined(__unix__)
     typedef struct Socket {
         int fd;
