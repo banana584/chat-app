@@ -13,8 +13,7 @@ if (WIN32)
 endif()
 
 if (MSVC)
-    target_compile_options(test_main PRIVATE /fsanitize=address /Zi /Od)
-    target_link_options(test_main PRIVATE /fsanitize=address /DEBUG)
+    # to place code later
 endif()
 
 add_test(NAME test_main COMMAND test_main)
