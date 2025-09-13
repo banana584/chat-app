@@ -24,7 +24,12 @@ target_include_directories(sockets PUBLIC ${PROJECT_SOURCE_DIR}/include)
 if(WIN32)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     target_link_libraries(ChatApp PRIVATE ws2_32 ucrt)
-    target_link_libraries(sockets PRIVATE ws2_32)
+    target_link_libraries(sockets PRIVATE ws2_32 ucrt)
+endif()
+
+if (MSCV)
+    target_link_libraries(ChatApp PRIVATE legacy_stdio_definitions)
+    target_link_libraries(sockets PRIVATE legacy_stdio_definitions)
 endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sockets)
