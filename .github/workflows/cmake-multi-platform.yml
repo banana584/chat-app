@@ -81,7 +81,7 @@ jobs:
     # TODO: find test exe and run it to get more info on missing dll
     - name: Test2
       ##working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: dir D:/a/chat-app/chat-app/build/bin/Debug
+      run: D:/a/chat-app/chat-app/build/bin/Debug/test_main.exe
 
 
 
