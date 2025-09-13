@@ -1,5 +1,7 @@
 #include "../../include/sockets/sockets.h"
 
+char socket_errbuff[1024] = {0};
+
 int Socket_InitializeLib() {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
