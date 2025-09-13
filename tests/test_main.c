@@ -6,6 +6,7 @@
 #include <sockets/sockets.h>
 
 void Socket_Destroy(Socket* socket) {
+  if (!socket) return;
   #if defined(_WIN32) || defined(_WIN64)
     closesocket(socket->fd);
   #elif defined(__linux__) || defined(__unix__)
