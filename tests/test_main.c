@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <assert.h>
-#include <unistd.h>
+#if defined(__linux__) || defined(__unix__)
+  #include <unistd.h>
+#endif
 #include <sockets/sockets.h>
 
 void Socket_Destroy(Socket* socket) {
