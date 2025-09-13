@@ -27,10 +27,15 @@ if(WIN32)
     target_link_libraries(sockets PRIVATE ws2_32 ucrt)
 endif()
 
-# if (MSCV)
-#     target_link_libraries(ChatApp PRIVATE legacy_stdio_definitions)
-#     target_link_libraries(sockets PRIVATE legacy_stdio_definitions)
-# endif()
+if (MSCV)
+  foreach(flag_var
+    CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+    CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
+    # Replace any /MD or /MDd with /MT or /MTd
+    string(REGEX REPLACE "/MDd" "/MTd" ${flag_var} "${${flag_var}}")
+    string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+  endforeach()
+endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sockets)
 
