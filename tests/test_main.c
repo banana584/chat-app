@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
   #if defined(__linux__) || defined(__unix__)
     assert(socket1->fd != -1);
   #elif defined(_WIN32) || defined(_WIN64)
-    assert(socket1->fd != INVALID_SOCKET)
+    assert(socket1->fd != INVALID_SOCKET);
   #endif
 
   struct sockaddr_in addr1 = {0};
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
   #if defined(__linux__) || defined(__unix__)
     assert(socket2->fd != -1);
   #elif defined(_WIN32) || defined(_WIN64)
-    assert(socket2->fd != INVALID_SOCKET)
+    assert(socket2->fd != INVALID_SOCKET);
   #endif
       
   Socket_Destroy(socket1);
