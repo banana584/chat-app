@@ -27,23 +27,23 @@ void Socket_DeInitializeLib() {
 Socket* Socket_Create() {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
-    Socket* socket = (Socket*)malloc(sizeof(Socket));
-    if (!socket) {
+    Socket* s = (Socket*)malloc(sizeof(Socket));
+    if (!s) {
         int result = errno;
         sprintf(socket_errbuff, "%s", strerror(result));
         errno = result;
         return NULL;
     }
 
-    socket->fd = socket(AF_INET, SOCK_STREAM, 0);
+    s->fd = socket(AF_INET, SOCK_STREAM, 0);
     int result = 0;
     
     #if defined(_WIN32) || defined(_WIN64)
-        if (socket->fd == INVALID_SOCKET) {
+        if (s->fd == INVALID_SOCKET) {
             result = WSAGetLastError();
         }
     #elif defined(__linux__) || defined(__unix__)
-        if (socket->fd < 0) {
+        if (s->fd < 0) {
             result = errno;
         }
     #endif
@@ -53,7 +53,7 @@ Socket* Socket_Create() {
         return NULL;
     }
 
-    return socket;
+    return s;
 }
 
 int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len) {
