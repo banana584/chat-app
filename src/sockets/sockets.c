@@ -32,7 +32,7 @@ Socket* Socket_Create() {
     Socket* s = (Socket*)malloc(sizeof(Socket));
     if (!s) {
         int result = errno;
-        sprintf(socket_errbuff, "%s", strerror(result));
+        strerror_s(socket_errbuff, sizeof(socket_errbuff), result);
         errno = result;
         return NULL;
     }
@@ -180,7 +180,7 @@ Message* Socket_Recieve(Socket* socket) {
 
     Message* message = (Message*)malloc(sizeof(Message));
     if (!message) {
-        sprintf(socket_errbuff, "%s", strerror(errno));
+        strerror_s(socket_errbuff, sizeof(socket_errbuff), errno);
         return NULL;
     }
     memset(message->string, 0, 1024);
