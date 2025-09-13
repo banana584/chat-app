@@ -78,9 +78,10 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --output-on-failure -V -N --build-config ${{ matrix.build_type }}
 
+    # TODO: find test exe and run it to get more info on missing dll
     - name: Test2
       ##working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: dir D:/a/chat-app/chat-app/build/bin/
+      run: dir D:/a/chat-app/chat-app/build/bin/Debug
 
 
 
