@@ -80,7 +80,7 @@ jobs:
 
     - name: Test2
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: /home/runner/work/chat-app/chat-app/build/tests/test_main
+      run: dir /home/runner/work/chat-app/chat-app/build/tests/
 
 
 
