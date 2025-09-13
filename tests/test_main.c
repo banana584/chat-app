@@ -24,6 +24,11 @@ int main(int argc, char* argv[]) {
   assert(errno == 0);
   assert(strcmp(socket_errbuff, "") == 0);
   assert(socket1 != NULL);
+  #if defined(__linux__) || defined(__unix__)
+    assert(socket1->fd != -1);
+  #elif defined(_WIN32) || defined(_WIN64)
+    assert(socket1->fd != INVALID_SOCKET)
+  #endif
 
   struct sockaddr_in addr1 = {0};
   addr1.sin_family = AF_INET;
@@ -43,7 +48,12 @@ int main(int argc, char* argv[]) {
   assert(errno == 0);
   assert(memcmp(socket_errbuff, empty, 1024) == 0);
   assert(socket2 != NULL);
-  
+  #if defined(__linux__) || defined(__unix__)
+    assert(socket2->fd != -1);
+  #elif defined(_WIN32) || defined(_WIN64)
+    assert(socket2->fd != INVALID_SOCKET)
+  #endif
+      
   Socket_Destroy(socket1);
   assert(errno == 0);
   assert(memcmp(socket_errbuff, empty, 1024) == 0);
