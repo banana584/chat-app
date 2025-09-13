@@ -1,4 +1,4 @@
-#ifndef SOCKETS_UTILS_H
+t#ifndef SOCKETS_UTILS_H
 #define SOCKETS_UTILS_H
 
 #include <stdio.h>
@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <errno.h>
 
-char socket_errbuff[1024];
+extern char socket_errbuff[1024];
 #define SOCKET_ERRBUFF_SIZE 1024
 
 #ifndef CLEAR_SOCKET_ERRBUFF
