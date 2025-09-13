@@ -1,7 +1,51 @@
 #include <stdio.h>
+#include <assert.h>
+#include <unistd.h>
+#include "../../include/sockets/sockets.h"
+
+void Socket_Destroy(Socket* socket) {
+  #if defined(_WIN32) || defined(_WIN64)
+    closesocket(socket->fd);
+  #elif defined(__linux__) || defined(__unix__)
+    close(socket->fd);
+  #endif
+  free(socket);
+}
 
 int main(int argc, char* argv[]) {
-  printf("No tests defined yet...\n");
+  assert(Socket_InitializeLib() == 0);
+
+  Socket* socket1 = Socket_Create();
+  assert(errno == 0);
+  assert(strcmp(socket_errbuff, "") == 0);
+
+  struct sockaddr_in addr1 = {0};
+  addr1.sin_family = AF_INET;
+  addr1.sin_port = htons(8080);
+  addr1.sin_addr.s_addr = inet_addr("127.0.0.1");
+  socklen_t addr1_len = sizeof(addr1);
+  
+  Socket_Bind(socket1, &addr1, addr1_len);
+  assert(errno == 0);
+  assert(strcmp(socket_errbuff, "") == 0);
+
+  Socket_Listen(socket1, 1);
+  assert(errno == 0);
+  assert(strcmp(socket_errbuff, "") == 0);
+
+  Socket* socket2 = Socket_Create();
+  assert(errno == 0);
+  assert(strcmp(socket_errbuff, "") == 0);
+
+  Socket_Destroy(socket1);
+  assert(errno == 0);
+  assert(strcmp(socket_errbuff, "") == 0);
+
+  Socket_Destroy(socket2);
+  assert(errno == 0);
+  assert(strcmp(socket_errbuff, "") == 0);
+
+  Socket_DeInitializeLib();
 
   return 0;
 }
