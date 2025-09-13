@@ -22,6 +22,7 @@ add_library(sockets
 target_include_directories(sockets PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 if(WIN32)
+    target_link_libraries(ChatApp PRIVATE ws2_32)
     target_link_libraries(sockets PRIVATE ws2_32)
 endif()
 
