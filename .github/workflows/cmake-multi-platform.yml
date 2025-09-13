@@ -80,7 +80,7 @@ jobs:
 
     - name: Test2
       ##working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: dir D:/a/chat-app/chat-app/build/tests/
+      run: dir D:/a/chat-app/chat-app/build/tests/CMakeFiles
 
 
 
