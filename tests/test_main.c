@@ -13,6 +13,9 @@ void Socket_Destroy(Socket* socket) {
 }
 
 int main(int argc, char* argv[]) {
+  char empty[1024] = {0};
+  memset(empty, 0, 1024);
+  
   assert(Socket_InitializeLib() == 0);
 
   Socket* socket1 = Socket_Create();
@@ -27,23 +30,23 @@ int main(int argc, char* argv[]) {
   
   Socket_Bind(socket1, &addr1, addr1_len);
   assert(errno == 0);
-  assert(strcmp(socket_errbuff, "") == 0);
+  assert(memcmp(socket_errbuff, empty, 1024) == 0);
 
   Socket_Listen(socket1, 1);
   assert(errno == 0);
-  assert(strcmp(socket_errbuff, "") == 0);
+  assert(memcmp(socket_errbuff, empty, 1024) == 0);
 
   Socket* socket2 = Socket_Create();
   assert(errno == 0);
-  assert(strcmp(socket_errbuff, "") == 0);
+  assert(memcmp(socket_errbuff, empty, 1024) == 0);
 
   Socket_Destroy(socket1);
   assert(errno == 0);
-  assert(strcmp(socket_errbuff, "") == 0);
+  assert(memcmp(socket_errbuff, empty, 1024) == 0);
 
   Socket_Destroy(socket2);
   assert(errno == 0);
-  assert(strcmp(socket_errbuff, "") == 0);
+  assert(memcmp(socket_errbuff, empty, 1024) == 0);
 
   Socket_DeInitializeLib();
 
