@@ -10,6 +10,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 set(CMAKE_C_FLAGS_DEBUG "-g")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
 
 if (MSCV)
   foreach(flag_var
