@@ -35,7 +35,8 @@ Socket* Socket_Create() {
         #if defined(_WIN32) || defined(_WIN64)
             strerror_s(socket_errbuff, sizeof(socket_errbuff), result);
         #elif defined(__linux__) || defined(__unix__)
-            strcpy(socket_errbuff, strerror(result));
+            strncpy(socket_errbuff, strerror(result), sizeof(socket_errbuff)-1);
+            socket_errbuff[sizeof(socket_errbuff)-1] = '\0';
         #endif
         errno = result;
         return NULL;
@@ -54,7 +55,7 @@ Socket* Socket_Create() {
         }
     #endif
     if (result != 0) {
-        FORMAT_SOCKET_ERROR_NUM(result, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(result, socket_errbuff);
         errno = result;
         return NULL;
     }
@@ -90,7 +91,7 @@ int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len) {
         #elif defined(__linux__) || defined(__unix__)
             errcode = errno;
         #endif
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return -1;
     }
@@ -116,7 +117,7 @@ int Socket_Listen(Socket* socket, int backlog) {
         #elif defined(__linux__) || defined(__unix__)
             errcode = errno;
         #endif
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return -1;
     }
@@ -124,10 +125,11 @@ int Socket_Listen(Socket* socket, int backlog) {
     return 0;
 }
 
-int Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
+Socket* Socket_Connect(struct sockaddr_in* addr) {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
-    int result = connect(socket->fd, (struct sockaddr*)&addr, sizeof(*addr));
+    Socket* s = Socket_Create();
+    int result = connect(s->fd, (struct sockaddr*)addr, sizeof(*addr));
     int errcode = 0;
 
     #if defined(_WIN32) || defined(_WIN64)
@@ -140,12 +142,12 @@ int Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
         }
     #endif
     if (errcode != 0) {
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
-        return -1;
+        return NULL;
     }
     
-    return 0;
+    return s;
 }
 
 Socket* Socket_Accept(Socket* socket) {
@@ -168,7 +170,7 @@ Socket* Socket_Accept(Socket* socket) {
         }
     #endif
     if (errcode != 0) {
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return NULL;
     }
@@ -195,7 +197,7 @@ int Socket_Send(Socket* socket, Message* message) {
         }
     #endif
     if (errcode != 0) {
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return -1;
     }
@@ -212,7 +214,8 @@ Message* Socket_Recieve(Socket* socket) {
         #if defined(_WIN32) || defined(_WIN64)
             strerror_s(socket_errbuff, sizeof(socket_errbuff), errno);
         #elif defined(__linux__) || defined(__unix__)
-            strcpy(socket_errbuff, strerror(errno));
+            strncpy(socket_errbuff, strerror(errno), sizeof(socket_errbuff)-1);
+            socket_errbuff[sizeof(socket_errbuff)-1] = '\0';
         #endif
         return NULL;
     }
@@ -234,7 +237,7 @@ Message* Socket_Recieve(Socket* socket) {
             errcode = errno;
         #endif
         free(message);
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return NULL;
     }

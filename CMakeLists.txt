@@ -12,15 +12,7 @@ set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Zi")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
 
-#if (MSCV)
-#  foreach(flag_var
-#    CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-#    CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
-#    # Replace any /MT or /MTd with /MD or /MDd
-#    string(REGEX REPLACE "/MTd" "/MDd" ${flag_var} "${${flag_var}}")
-#    string(REGEX REPLACE "/MT" "/MD" ${flag_var} "${${flag_var}}")
-#  endforeach()
-#endif()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
 
 add_executable(${CMAKE_PROJECT_NAME} 
     src/main.c

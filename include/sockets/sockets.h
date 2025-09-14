@@ -33,14 +33,18 @@ extern char socket_errbuff[1024];
         int fd;
     } Socket;
     #ifndef FORMAT_SOCKET_ERROR_NUM
-        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) strcpy(*buffer, strerror(error_num))
+        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) strncpy(buffer, strerror(error_num), sizeof(buffer)-1); buffer[sizeof(buffer)-1] = '\0'
     #endif
 #elif defined(_WIN32) || defined(_WIN64)
     typedef struct Socket {
         SOCKET fd;
     } Socket;
     #ifndef FORMAT_SOCKET_ERROR_NUM
-        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error_num, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)buffer, 0, NULL)
+        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) \
+            FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, \
+                NULL, (DWORD)(error_num), \
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), \
+                (LPSTR)(buffer), SOCKET_ERRBUFF_SIZE, NULL)
     #endif
 #endif
 
@@ -62,7 +66,7 @@ int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len);
 
 int Socket_Listen(Socket* socket, int backlog);
 
-int Socket_Connect(Socket* socket, struct sockaddr_in* addr);
+Socket* Socket_Connect(struct sockaddr_in* addr);
 
 Socket* Socket_Accept(Socket* socket);
 
