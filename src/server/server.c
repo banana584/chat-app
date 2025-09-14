@@ -37,3 +37,20 @@ void Server_Destroy(Server* server) {
 
   free(server);
 }
+
+void Server_Accept(Server* server) {
+  Socket* client_sock = Socket_Accept(server->server_sock);
+
+  if (server->num_clients + 1 > server->max_clients) {
+    if (!server->client_socks) {
+      server->client_socks = (Socket**)malloc(sizeof(Socket*) * 1);
+      server->max_clients = 1;
+    } else {
+      server->client_socks = (Socket**)realloc(server->client_socks, sizeof(Socket*) * server->max_clients * 2);
+      server->max_clients *= 2;
+    }
+  }
+
+  server->client_socks[server->num_clients] = client_sock;
+  server->num_clients++;
+}
