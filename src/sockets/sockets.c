@@ -125,18 +125,19 @@ int Socket_Listen(Socket* socket, int backlog) {
     return 0;
 }
 
-int Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
+Socket* Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
-    int result = connect(socket->fd, (struct sockaddr*)&addr, sizeof(*addr));
+    Socket* s = (Socket*)malloc(sizeof(Socket*));
+    s->fd = connect(socket->fd, (struct sockaddr*)addr, sizeof(*addr));
     int errcode = 0;
 
     #if defined(_WIN32) || defined(_WIN64)
-        if (result == SOCKET_ERROR) {
+        if (s->fd == SOCKET_ERROR) {
             errcode = WSAGetLastError();
         }
     #elif defined(__linux__) || defined(__unix__)
-        if (result < 0) {
+        if (s->fd < 0) {
             errcode = errno;
         }
     #endif
