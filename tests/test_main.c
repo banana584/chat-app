@@ -15,7 +15,11 @@ int main(int argc, char* argv[]) {
   assert(socket1 != NULL);
 
   int optval = 1;
-  setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(int));
+  #if defined(_WIN32) || defined(_WIN64)
+    setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof(optval));
+  #elif defined(__linux__) || defined(__unix__)
+    setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+  #endif
   #if defined(__linux__) || defined(__unix__)
     assert(socket1->fd != -1);
   #elif defined(_WIN32) || defined(_WIN64)
