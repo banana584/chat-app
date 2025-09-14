@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #if defined(__linux__) || defined(__unix__)
+    #include <unistd.h>
     #include <sys/socket.h>
     #include <netinet/in.h>
     #include <arpa/inet.h>
