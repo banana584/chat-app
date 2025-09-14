@@ -79,7 +79,10 @@ jobs:
       #run: ctest --output-on-failure -VV --build-config ${{ matrix.build_type }}
       run: |
         cd build/tests
-        "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\cdb.exe" -c ".echo ---Starting---;g;.echo ---Crash---;kv;q" ../bin/Release/test_main.exe
+        echo g > cdb_commands.txt
+        echo kv >> cdb_commands.txt
+        echo q >> cdb_commands.txt
+        "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\cdb.exe" -c cdb_commands.txt ../bin/Release/test_main.exe
         type cdb_output.txt
 
 
