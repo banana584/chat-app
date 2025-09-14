@@ -170,7 +170,7 @@ Socket* Socket_Accept(Socket* socket) {
     if (errcode != 0) {
         FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
         errno = errcode;
-        return -1;
+        return NULL;
     }
 
     Socket* s = (Socket*)malloc(sizeof(Socket));
