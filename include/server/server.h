@@ -21,3 +21,9 @@ void Server_Destroy(Server* server);
 void Server_Accept(Server* server);
 
 void Server_Disconnect(Server* server, int idx);
+
+int Server_Send(Server* server, int idx, Message* message);
+
+Message* Server_Recv(Server* server, int idx);
+
+int Server_Sendall(Server* server, Message* message);
