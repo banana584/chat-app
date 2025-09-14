@@ -55,7 +55,7 @@ Socket* Socket_Create() {
         }
     #endif
     if (result != 0) {
-        FORMAT_SOCKET_ERROR_NUM(result, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(result, socket_errbuff);
         errno = result;
         return NULL;
     }
@@ -91,7 +91,7 @@ int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len) {
         #elif defined(__linux__) || defined(__unix__)
             errcode = errno;
         #endif
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return -1;
     }
@@ -117,7 +117,7 @@ int Socket_Listen(Socket* socket, int backlog) {
         #elif defined(__linux__) || defined(__unix__)
             errcode = errno;
         #endif
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return -1;
     }
@@ -142,7 +142,7 @@ Socket* Socket_Connect(struct sockaddr_in* addr) {
         }
     #endif
     if (errcode != 0) {
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return NULL;
     }
@@ -170,7 +170,7 @@ Socket* Socket_Accept(Socket* socket) {
         }
     #endif
     if (errcode != 0) {
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return NULL;
     }
@@ -197,7 +197,7 @@ int Socket_Send(Socket* socket, Message* message) {
         }
     #endif
     if (errcode != 0) {
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return -1;
     }
@@ -237,7 +237,7 @@ Message* Socket_Recieve(Socket* socket) {
             errcode = errno;
         #endif
         free(message);
-        FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
+        FORMAT_SOCKET_ERROR_NUM(errcode, socket_errbuff);
         errno = errcode;
         return NULL;
     }
