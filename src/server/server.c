@@ -110,7 +110,7 @@ Message* Server_Recv(Server* server, int idx) {
 
 int Server_Sendall(Server* server, Message* message) {
   Node* current = server->client_socks_head;
-  while (current->id == idx) {
+  while (current) {
     Socket_Send(current->data, message);
     current = current->next;
   }
