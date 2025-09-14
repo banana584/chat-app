@@ -10,9 +10,8 @@ Server* Server_Create(int port) {
   server->addr.sin_addr.s_addr = INADDR_ANY;
   server->addr_len = sizeof(server->addr);
 
-  server->client_socks = NULL;
+  server->client_socks_head = NULL;
   server->num_clients = 0;
-  server->max_clients = 0;
 
   Socket_Bind(server->server_sock, &server->addr, server->addr_len);
 
@@ -26,11 +25,15 @@ void Server_Destroy(Server* server) {
     return;
   }
 
-  if (server->client_socks) {
-    for (int i = 0; i < server->num_clients; i++) {
-      Socket_Destroy(server->client_socks[i]);
+  if (server->client_socks_head) {
+    Node* current = server->client_socks_head;
+    Node* tmp = NULL;
+    while (current) {
+      Socket_Destroy(current->data);
+      tmp = current->next;
+      free(current);
+      current = tmp;
     }
-    free(server->client_socks);
   }
 
   Socket_Destroy(server->server_sock);
@@ -51,6 +54,14 @@ void Server_Accept(Server* server) {
     }
   }
 
-  server->client_socks[server->num_clients] = client_sock;
+  Node* node = (Node*)malloc(sizeof(Node));
+  node->next = NULL;
+  node->data = client_sock;
+  node->free = 0;
+  Node* current = server->client_socks_head;
+  while (current && current->next) {
+    current = current->next;
+  }
+  current->next = node;
   server->num_clients++;
 }
