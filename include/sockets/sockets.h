@@ -64,7 +64,7 @@ int Socket_Listen(Socket* socket, int backlog);
 
 int Socket_Connect(Socket* socket, struct sockaddr_in* addr);
 
-int Socket_Accept(Socket* socket);
+Socket* Socket_Accept(Socket* socket);
 
 int Socket_Send(Socket* socket, Message* message);
 
