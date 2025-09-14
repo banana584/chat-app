@@ -36,3 +36,4 @@ void Server_Destroy(Server* server) {
   Socket_Destroy(server->server_sock);
 
   free(server);
+}
