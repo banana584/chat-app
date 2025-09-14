@@ -33,7 +33,7 @@ extern char socket_errbuff[1024];
         int fd;
     } Socket;
     #ifndef FORMAT_SOCKET_ERROR_NUM
-        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) strcpy(*buffer, strerror(error_num))
+        #define FORMAT_SOCKET_ERROR_NUM(error_num, buffer) strncpy(*buffer, strerror(error_num), sizeof(*buffer)-1); *buffer[sizeof(*buffer)-1] = '\0'
     #endif
 #elif defined(_WIN32) || defined(_WIN64)
     typedef struct Socket {
