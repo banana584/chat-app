@@ -35,7 +35,8 @@ Socket* Socket_Create() {
         #if defined(_WIN32) || defined(_WIN64)
             strerror_s(socket_errbuff, sizeof(socket_errbuff), result);
         #elif defined(__linux__) || defined(__unix__)
-            strcpy(socket_errbuff, strerror(result));
+            strncpy(socket_errbuff, strerror(result), sizeof(socket_errbuff)-1);
+            socket_errbuff[sizeof(socket_errbuff)-1] = '\0';
         #endif
         errno = result;
         return NULL;
@@ -212,7 +213,8 @@ Message* Socket_Recieve(Socket* socket) {
         #if defined(_WIN32) || defined(_WIN64)
             strerror_s(socket_errbuff, sizeof(socket_errbuff), errno);
         #elif defined(__linux__) || defined(__unix__)
-            strcpy(socket_errbuff, strerror(errno));
+            strncpy(socket_errbuff, strerror(errno), sizeof(socket_errbuff)-1);
+            socket_errbuff[sizeof(socket_errbuff)-1] = '\0';
         #endif
         return NULL;
     }
