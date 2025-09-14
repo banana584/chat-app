@@ -12,7 +12,6 @@ typedef struct Server {
   socklen_t addr_len;
   Node* client_socks_head;
   size_t num_clients;
-  size_t max_clients;
 } Server;
 
 Server* Server_Create(int port);
