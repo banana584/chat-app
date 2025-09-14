@@ -75,3 +75,45 @@ void Server_Disconnect(Server* server, int idx) {
   }
   free(current);
 }
+
+int Server_Send(Server* server, int idx, Message* message) {
+  Node* current = server->client_socks_head;
+  while (current) {
+    if (current->id == idx) {
+      break;
+    }
+    current = current->next;
+  }
+
+  if (!current) {
+    return -1;
+  }
+
+  return Socket_Send(current->data, message);
+}
+
+Message* Server_Recv(Server* server, int idx) {
+  Node* current = server->client_socks_head;
+  while (current) {
+    if (current->id == idx) {
+      break;
+    }
+    current = current->next;
+  }
+
+  if (!current) {
+    return NULL;
+  }
+
+  return Socket_Recieve(current->data);
+}
+
+int Server_Sendall(Server* server, Message* message) {
+  Node* current = server->client_socks_head;
+  while (current->id == idx) {
+    Socket_Send(current->data, message);
+    current = current->next;
+  }
+
+  return 0;
+}
