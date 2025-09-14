@@ -13,14 +13,14 @@ if (WIN32)
   target_link_libraries(test_main PRIVATE ws2_32)
 endif()
 
-if (MSVC)
-  foreach(flag_var
-    CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-    CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
-    # Replace any /MT or /MTd with /MD or /MDd
-    string(REGEX REPLACE "/MTd" "/MDd" ${flag_var} "${${flag_var}}")
-    string(REGEX REPLACE "/MT" "/MD" ${flag_var} "${${flag_var}}")
-  endforeach()
-endif()
+#if (MSVC)
+#  foreach(flag_var
+#    CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+#    CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
+#    # Replace any /MT or /MTd with /MD or /MDd
+#    string(REGEX REPLACE "/MTd" "/MDd" ${flag_var} "${${flag_var}}")
+#    string(REGEX REPLACE "/MT" "/MD" ${flag_var} "${${flag_var}}")
+#  endforeach()
+#endif()
 
 add_test(NAME test_main COMMAND test_main)
