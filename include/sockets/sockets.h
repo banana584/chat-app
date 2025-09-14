@@ -55,6 +55,8 @@ void Socket_DeInitializeLib();
 
 Socket* Socket_Create();
 
+void Socket_Destroy(Socket* socket);
+
 int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len);
 
 int Socket_Listen(Socket* socket, int backlog);
