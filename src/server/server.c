@@ -51,3 +51,27 @@ void Server_Accept(Server* server) {
   server->client_socks_head = node;
   server->num_clients++;
 }
+
+void Server_Disconnect(Server* server, int idx) {
+  Node* prev = NULL;
+  Node* current = server->client_socks_head;
+  while (current) {
+    if (current->id == idx) {
+      break;
+    }
+    prev = current;
+    current = current->next;
+  }
+
+  if (!current) {
+    return;
+  }
+
+  Socket_Destroy(current->data);
+  if (!prev) {
+    server->client_socks_head = NULL;
+  } else {
+    prev->next = current->next;
+  }
+  free(current);
+}
