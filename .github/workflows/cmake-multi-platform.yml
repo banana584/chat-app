@@ -76,7 +76,7 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest --output-on-failure -VV -N --build-config ${{ matrix.build_type }}
+      run: ctest --output-on-failure -VV --build-config ${{ matrix.build_type }}
 
     # TODO: find test exe and run it to get more info on missing dll
     - name: Test2
