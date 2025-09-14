@@ -12,3 +12,5 @@ typedef struct Server {
 Server* Server_Create(int port);
 
 void Server_Destroy(Server* server);
+
+void Server_Accept(Server* server);
