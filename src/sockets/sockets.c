@@ -144,10 +144,10 @@ Socket* Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
     if (errcode != 0) {
         FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
         errno = errcode;
-        return -1;
+        return NULL;
     }
     
-    return 0;
+    return s;
 }
 
 Socket* Socket_Accept(Socket* socket) {
