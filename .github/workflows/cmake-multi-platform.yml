@@ -76,15 +76,5 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      #run: ctest --output-on-failure -VV --build-config ${{ matrix.build_type }}
-      shell: cmd
-      run: |
-        cd build/tests
-        echo g > cdb_commands.txt
-        echo kv >> cdb_commands.txt
-        echo q >> cdb_commands.txt
-        $exe = Resolve-Path ../bin/Release/test_main.exe
-        type cdb_commands.txt | "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\cdb.exe" $exe > cdb_output.txt
-        type cdb_output.txt
-
+      run: ctest --output-on-failure -VV --build-config ${{ matrix.build_type }}
 
