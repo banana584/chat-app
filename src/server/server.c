@@ -14,6 +14,10 @@ Server* Server_Create(int port) {
   server->num_clients = 0;
   server->max_clients = 0;
 
+  Socket_Bind(server->server_sock, &server->addr, server->addr_len);
+
+  Socket_Listen(server->server_sock, 1); // Temporary 1, will change later.
+
   return server;
 }
 
