@@ -2,7 +2,7 @@
 
 typedef struct Node {
   struct Node* next;
-  int index;
+  int id;
   Socket* data;
 } Node;
 
