@@ -63,7 +63,7 @@ Socket* Socket_Create() {
 }
 
 void Socket_Destroy(Socket* socket) {
-  if (!socket) { errno = EINVAL; return };
+  if (!socket) { errno = EINVAL; return; };
   #if defined(_WIN32) || defined(_WIN64)
     closesocket(socket->fd);
   #elif defined(__linux__) || defined(__unix__)
