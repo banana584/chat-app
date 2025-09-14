@@ -30,13 +30,21 @@ add_library(sockets
     src/sockets/sockets.c
 )
 
+add_library(server
+    src/server/server.c
+)
+
 target_include_directories(sockets PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
+target_include_directories(server PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
 if(WIN32)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
     target_link_libraries(ChatApp PRIVATE ws2_32 ucrt)
     target_link_libraries(sockets PRIVATE ws2_32 ucrt)
 endif()
+
+target_link_libraries(server PRIVATE sockets)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sockets)
 

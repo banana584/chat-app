@@ -148,7 +148,7 @@ int Socket_Connect(Socket* socket, struct sockaddr_in* addr) {
     return 0;
 }
 
-int Socket_Accept(Socket* socket) {
+Socket* Socket_Accept(Socket* socket) {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
 
@@ -170,10 +170,13 @@ int Socket_Accept(Socket* socket) {
     if (errcode != 0) {
         FORMAT_SOCKET_ERROR_NUM(errcode, &socket_errbuff);
         errno = errcode;
-        return -1;
+        return NULL;
     }
 
-    return result;
+    Socket* s = (Socket*)malloc(sizeof(Socket));
+    s->fd = result;
+
+    return s;
 }
 
 int Socket_Send(Socket* socket, Message* message) {
