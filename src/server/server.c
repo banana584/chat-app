@@ -10,9 +10,8 @@ Server* Server_Create(int port) {
   server->addr.sin_addr.s_addr = INADDR_ANY;
   server->addr_len = sizeof(server->addr);
 
-  server->client_socks = NULL;
+  server->client_socks_head = NULL;
   server->num_clients = 0;
-  server->max_clients = 0;
 
   Socket_Bind(server->server_sock, &server->addr, server->addr_len);
 
@@ -26,11 +25,15 @@ void Server_Destroy(Server* server) {
     return;
   }
 
-  if (server->client_socks) {
-    for (int i = 0; i < server->num_clients; i++) {
-      Socket_Destroy(server->client_socks[i]);
+  if (server->client_socks_head) {
+    Node* current = server->client_socks_head;
+    Node* tmp = NULL;
+    while (current) {
+      Socket_Destroy(current->data);
+      tmp = current->next;
+      free(current);
+      current = tmp;
     }
-    free(server->client_socks);
   }
 
   Socket_Destroy(server->server_sock);
@@ -41,16 +44,10 @@ void Server_Destroy(Server* server) {
 void Server_Accept(Server* server) {
   Socket* client_sock = Socket_Accept(server->server_sock);
 
-  if (server->num_clients + 1 > server->max_clients) {
-    if (!server->client_socks) {
-      server->client_socks = (Socket**)malloc(sizeof(Socket*) * 1);
-      server->max_clients = 1;
-    } else {
-      server->client_socks = (Socket**)realloc(server->client_socks, sizeof(Socket*) * server->max_clients * 2);
-      server->max_clients *= 2;
-    }
-  }
-
-  server->client_socks[server->num_clients] = client_sock;
+  Node* node = (Node*)malloc(sizeof(Node));
+  node->data = client_sock;
+  node->id = server->num_clients + 1;
+  node->next = server->client_socks_head;
+  server->client_socks_head = node;
   server->num_clients++;
 }
