@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 
   int optval = 1;
   #if defined(_WIN32) || defined(_WIN64)
-    setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof(optval));
   #elif defined(__linux__) || defined(__unix__)
     setsockopt(socket1->fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
   #endif
