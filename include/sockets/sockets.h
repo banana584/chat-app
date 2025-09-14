@@ -62,7 +62,7 @@ int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len);
 
 int Socket_Listen(Socket* socket, int backlog);
 
-Socket* Socket_Connect(Socket* socket, struct sockaddr_in* addr);
+Socket* Socket_Connect(struct sockaddr_in* addr);
 
 Socket* Socket_Accept(Socket* socket);
 
