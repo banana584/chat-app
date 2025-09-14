@@ -44,24 +44,10 @@ void Server_Destroy(Server* server) {
 void Server_Accept(Server* server) {
   Socket* client_sock = Socket_Accept(server->server_sock);
 
-  if (server->num_clients + 1 > server->max_clients) {
-    if (!server->client_socks) {
-      server->client_socks = (Socket**)malloc(sizeof(Socket*) * 1);
-      server->max_clients = 1;
-    } else {
-      server->client_socks = (Socket**)realloc(server->client_socks, sizeof(Socket*) * server->max_clients * 2);
-      server->max_clients *= 2;
-    }
-  }
-
   Node* node = (Node*)malloc(sizeof(Node));
-  node->next = NULL;
   node->data = client_sock;
-  node->free = 0;
-  Node* current = server->client_socks_head;
-  while (current && current->next) {
-    current = current->next;
-  }
-  current->next = node;
+  node->id = server->num_clients + 1;
+  node->next = server->client_socks_head;
+  server->client_socks_head = node;
   server->num_clients++;
 }
