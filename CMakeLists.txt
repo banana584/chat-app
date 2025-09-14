@@ -12,9 +12,7 @@ set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Zi")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
 
-if (MSCV)
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /RTC1") # MSVC runtime checks
-endif()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
 
 add_executable(${CMAKE_PROJECT_NAME} 
     src/main.c
