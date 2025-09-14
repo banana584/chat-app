@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #if defined(__linux__) || defined(__unix__)
+    #include <unistd.h>
     #include <sys/socket.h>
     #include <netinet/in.h>
     #include <arpa/inet.h>
@@ -54,6 +55,8 @@ int Socket_InitializeLib();
 void Socket_DeInitializeLib();
 
 Socket* Socket_Create();
+
+void Socket_Destroy(Socket* socket);
 
 int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len);
 

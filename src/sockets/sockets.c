@@ -62,6 +62,16 @@ Socket* Socket_Create() {
     return s;
 }
 
+void Socket_Destroy(Socket* socket) {
+  if (!socket) { errno = EINVAL; return; };
+  #if defined(_WIN32) || defined(_WIN64)
+    closesocket(socket->fd);
+  #elif defined(__linux__) || defined(__unix__)
+    close(socket->fd);
+  #endif
+  free(socket);
+}
+
 int Socket_Bind(Socket* socket, struct sockaddr_in* addr, socklen_t addr_len) {
     CLEAR_SOCKET_ERRBUFF(socket_errbuff);
     errno = 0;
