@@ -2,7 +2,7 @@ enable_testing()
 
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 
-set(CMAKE_C_FLAGS_DEBUG "-g -fsanitize=address")
+set(CMAKE_C_FLAGS_DEBUG "-g")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
 
 add_executable(test_main test_main.c)
