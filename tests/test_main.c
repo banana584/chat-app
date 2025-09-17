@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[]) {
   char empty[1024] = {0};
-  memset(empty, 0, 1024);
+  memset(empty, 0, 1024 * sizeof(char));
   
   assert(Socket_InitializeLib() == 0);
 
