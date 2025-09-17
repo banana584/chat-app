@@ -36,11 +36,11 @@ int main(int argc, char* argv[]) {
   
   Socket_Bind(socket1, &addr1, addr1_len);
   assert(errno == 0);
-  assert(memcmp(socket_errbuff, empty, 1024) == 0);
+  assert(memcmp(socket_errbuff, empty, 1024 * sizeof(char)) == 0);
 
   Socket_Listen(socket1, 1);
   assert(errno == 0);
-  assert(memcmp(socket_errbuff, empty, 1024) == 0);
+  assert(memcmp(socket_errbuff, empty, 1024 * sizeof(char)) == 0);
 
   Socket* socket2 = Socket_Create();
   assert(socket2 != NULL);
@@ -50,15 +50,15 @@ int main(int argc, char* argv[]) {
     assert(socket2->fd != INVALID_SOCKET);
   #endif
   assert(errno == 0);
-  assert(memcmp(socket_errbuff, empty, 1024) == 0);
+  assert(memcmp(socket_errbuff, empty, 1024 * sizeof(char)) == 0);
       
   Socket_Destroy(socket1);
   assert(errno == 0);
-  assert(memcmp(socket_errbuff, empty, 1024) == 0);
+  assert(memcmp(socket_errbuff, empty, 1024 * sizeof(char)) == 0);
 
   Socket_Destroy(socket2);
   assert(errno == 0);
-  assert(memcmp(socket_errbuff, empty, 1024) == 0);
+  assert(memcmp(socket_errbuff, empty, 1024 * sizeof(char)) == 0);
 
   Socket_DeInitializeLib();
 
